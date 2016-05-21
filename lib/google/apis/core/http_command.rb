@@ -281,6 +281,11 @@ module Google
               # End workaround
               apply_request_options(req)
             end
+
+            #gzip HACK (Hurley can return gzip)
+            #https://github.com/lostisland/hurley   ----   Hurley - DEAD project, don't use
+            JSON.parse(response.body) rescue response.body = ActiveSupport::Gzip.decompress(response.body)
+
             logger.debug { response.status_code }
             logger.debug { response.inspect }
             response = process_response(response.status_code, response.header, response.body)
